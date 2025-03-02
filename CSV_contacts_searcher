@@ -1,37 +1,39 @@
 import csv
 
-class PhoneContact ():
+class PhoneContact:
     def __init__(self, name, phone):
         self.name = name
         self.phone = phone
+        
+    def __str__(self):
+        return  (f"Name: {self.name}, Phone: {self.phone}")
     
-    #def __str__(self):
-        #return 'Name: {} and Phone: {}'.format(self.name, self.phone)
-
 class Phone():
     def __init__(self):
-        self.contacts = []
-    
-    def load_contacts_from_csv (self, file):
-        with open(file, newline='') as csvfile:
-            fieldnames = ['Name', 'Phone']
-            reader = csv.DictReader(csvfile, fieldnames=fieldnames)
+        self.listi = []
+        
+    def loading(self):   
+        with open('contacts.csv', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
             for row in reader:
-                self.contacts.append(PhoneContact(row['Name'],row['Phone']))
-        #print(self.contacts)
-        
-    def search_contacts(self, phrase):
-        
-        contr = 0
-        for contact in self.contacts:
-            if phrase.lower() in contact.name.lower():
-                print('Name: {} and Phone: {}'.format(contact.name, contact.phone))
-                contr += 1
-        if contr == 0:
-            print('Not found')
-    
-ob = Phone()
-ob.load_contacts_from_csv('contacts.csv')
+                a = row['Name'].upper()
+                self.listi.append(PhoneContact(a, row['Phone']))
 
-phrase = input("Search for: ")
-ob.search_contacts(phrase)
+        for contact in self.listi:
+            print(contact)
+            
+    def search_contacts(self, phrase):
+        phrase_mayus = phrase.upper()
+        flag = 0
+        for contact in self.listi:
+            if phrase_mayus in contact.name:
+                print(contact.name+ ":" + contact.phone)
+                flag += 1
+                
+        if flag != 0:
+            print("not found")
+                
+ob = Phone()
+ob.loading()
+ob.search_contacts("moth")
+ob.search_contacts("fdj")
